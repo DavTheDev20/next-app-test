@@ -21,3 +21,7 @@ td {
 tr:hover {
   background-color: rgba(221, 221, 221, 0.417);
 }
+
+a {
+  color: blue;
+}

@@ -1,4 +1,5 @@
 import { Deal } from '../interfaces';
+import Link from 'next/link';
 
 const API_URL = 'http://localhost:3000/api/deals';
 
@@ -11,7 +12,7 @@ export default async function Page() {
   const data = await getData();
   const deals = data.deals;
 
-  const dealsTotal = () => {
+  const dealsPrincipalTotal = () => {
     let total = 0;
     deals.map((deal: Deal) => {
       total += deal.principal;
@@ -19,9 +20,17 @@ export default async function Page() {
     return total;
   };
 
+  const dealsBalanceTotal = () => {
+    let total = 0;
+    deals.map((deal: Deal) => {
+      total += deal.balance;
+    });
+    return total;
+  };
+
   return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '2%' }}>All DB Users</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '2%' }}>All Deals</h1>
       <table>
         <thead style={{ borderBottom: '1px solid black' }}>
           <tr>
@@ -38,7 +47,9 @@ export default async function Page() {
             return (
               <tr key={deal.id}>
                 <td>{deal.id}</td>
-                <td>{deal.accountName}</td>
+                <td>
+                  <Link href={`/deals/${deal.id}`}>{deal.accountName}</Link>
+                </td>
                 <td>{deal.relationshipManager}</td>
                 <td>$ {deal.principal.toLocaleString()}</td>
                 <td>$ {deal.balance.toLocaleString()}</td>
@@ -49,11 +60,17 @@ export default async function Page() {
         </tbody>
         <tfoot>
           <tr>
-            <td>Total</td>
+            <td>
+              <strong>Total</strong>
+            </td>
             <td> </td>
             <td> </td>
-            <td>$ {dealsTotal().toLocaleString()}</td>
-            <td></td>
+            <td>
+              <strong>$ {dealsPrincipalTotal().toLocaleString()}</strong>
+            </td>
+            <td>
+              <strong>$ {dealsBalanceTotal().toLocaleString()}</strong>
+            </td>
             <td></td>
           </tr>
         </tfoot>

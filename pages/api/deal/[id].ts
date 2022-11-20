@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Deal } from '../../interfaces';
+import { Deal } from '../../../interfaces';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const deals: Deal[] = [
     {
       id: 1,
@@ -28,6 +31,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       dateCreated: new Date(1985, 1, 10),
     },
   ];
+  const dealId: number = Number(req.query.id);
 
-  res.status(200).json({ success: true, deals: deals });
+  const deal = deals.find(({ id }) => {
+    return id === dealId;
+  });
+
+  if (deal) {
+    return res.status(200).json({ success: true, deal: deal });
+  }
+
+  return res
+    .status(400)
+    .json({ success: false, error: 'No deal with that id.' });
 }
